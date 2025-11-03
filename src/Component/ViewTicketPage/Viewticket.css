@@ -1,0 +1,96 @@
+/* Page background */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title styling */
+.Viewtitle {
+  color: #ffffff;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+}
+
+/* Main container */
+.viewticketcontainer {
+  background-color: #ffffff;
+  margin-top: 30px;
+  padding: 40px 50px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Form layout */
+.viewticketcontainer form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 16px;
+}
+/* label*/
+.viewticketcontainer label {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+/* Input fields */
+.viewticketcontainer input {
+  width: 80%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+/* Button */
+.viewticketcontainer button {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  width: 90%;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+/* Hover and active effects */
+.viewticketcontainer button:hover {
+  background-color: #1e40af;
+  transform: translateY(-2px);
+}
+
+.viewticketcontainer button:active {
+  transform: translateY(0);
+}
+
+/* Main ticket details container */
+.detailcontainer {
+  padding: 10px 15px;
+  margin-top: 5px;
+}
+/* Each detail line */
+.detailcontainer p {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #0f172a;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 6px;
+}
+
+

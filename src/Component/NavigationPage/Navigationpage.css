@@ -1,0 +1,74 @@
+/* Page title */
+.Navigatetitle {
+  text-align: center;
+  color: #1e3a8a;
+  font-size: 32px;
+  margin-top: 30px;
+  font-weight: 700;
+}
+
+/* Quotes Section */
+.Quotescontainer {
+  text-align: center;
+  margin: 10px 0 30px;
+}
+
+.Quotescontainer p {
+  color: #334155;
+  font-size: 16px;
+  margin: 4px 0;
+}
+
+/* Navigation Icons Container */
+.navicons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Each icon + label block */
+.iconitem {
+  text-align: center;
+}
+
+.iconitem a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Icons */
+#icons {
+  font-size: 42px;
+  color: #2563eb;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover effect */
+#icons:hover {
+  transform: scale(1.2);
+  color: #1d4ed8;
+}
+
+/* Labels */
+.iconitem label {
+  display: block;
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .navicons {
+    gap: 30px;
+  }
+  #icons {
+    font-size: 34px;
+  }
+}
+

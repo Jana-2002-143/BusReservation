@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Page title */
+h1 {
+  text-align: center;
+  color: white;
+  margin-top: 30px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Main container */
+.Cancelticketcontainer {
+  max-width: 400px;
+  background-color: #f8fafc;
+  margin: 40px auto;
+  padding: 25px 30px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Form labels */
+.Cancelticketcontainer label {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 15px;
+  margin-bottom: 6px;
+}
+
+/* Input fields */
+.Cancelticketcontainer input {
+  width: 80%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  transition: border 0.3s ease;
+}
+/* Cancel button */
+.Cancelticketcontainer button {
+  width: 90%;
+  background-color: #dc2626;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Button hover and active */
+.Cancelticketcontainer button:hover {
+  background-color: #b91c1c;
+  transform: scale(1.02);
+}
+
+/* Ticket cancel message box */
+.detailcontainer {
+  padding: 15px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Cancel message text */
+.detailcontainer h1 {
+  color: #b91c1c;
+  font-size: 18px;
+  margin: 0;
+}
