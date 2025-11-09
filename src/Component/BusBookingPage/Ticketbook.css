@@ -98,3 +98,7 @@ body {
   text-align: center;
   margin-top: 5px;
 }
+.inputuser{
+  color: red;
+  font-size: small;
+}

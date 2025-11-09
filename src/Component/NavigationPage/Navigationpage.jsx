@@ -19,26 +19,26 @@ function Navigationpage() {
             <div className='navicons'>
                 <div className='iconitem'>
                     <Link to="/Loginpage">
-                        <FaHome id="icons" />
-                        <label>Home</label>
+                        <FaHome className="icons" />
+                        <label htmlFor="icons">Home</label>
                     </Link>
                 </div>
                 <div className='iconitem'>
                     <Link to="/Ticketbook">
-                        <FaBus id="icons" />
-                        <label>Book Ticket</label>
+                        <FaBus className="icons" />
+                        <label htmlFor="icons">Book Ticket</label>
                     </Link>
                 </div>
                 <div className='iconitem'>
                     <Link to="/Viewticket">
-                        <IoTicket id="icons" />
-                        <label>View Ticket</label>
+                        <IoTicket className="icons" />
+                        <label htmlFor="icons">View Ticket</label>
                     </Link>
                 </div>
                 <div className='iconitem'>
                     <Link to="/Cancelbus">
-                        <MdCancel id="icons" />
-                        <label>Cancel Ticket</label>
+                        <MdCancel className="icons" />
+                        <label htmlFor="icons">Cancel Ticket</label>
                     </Link>
                 </div>
             </div>

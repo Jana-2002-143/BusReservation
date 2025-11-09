@@ -1,42 +1,104 @@
-import { useState } from 'react'
-import './Viewticket.css'
+import { useState } from "react";
+import "./Viewticket.css";
 
 function Viewticket() {
-    const [userview,setUserview]=useState(false)
+  const [busName, setBusName] = useState("");
+  const [date, setDate] = useState("");   // text format
+  const [error, setError] = useState({});
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const viewbtn=(e)=>{
-        e.preventDefault();
-        setUserview(true);
+  const phone = localStorage.getItem("phone");
+
+  const viewTicket = async (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+    if (!date) newErrors.date = "Please enter date";
+    if (!busName) newErrors.busName = "Please select a bus";
+    setError(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    if (!phone) {
+      alert("You must be logged in");
+      return;
     }
-    return (
-        <>
-            <h1 className='Viewtitle'>View Ticket</h1>
-            <div className="viewticketcontainer">
-                <form action="Viewticket">
-                    <label
-                        htmlFor="viewdate">Booked Date</label>
-                        <input
-                            type="date"
-                            id="viewdate"
-                            placeholder="Date" />
-                    <label
-                        htmlFor="vnum">Booked No</label>
-                        <input
-                            type="number"
-                            id="vnum"
-                            placeholder="Phone no" />
-                    <button type='submit'onClick={viewbtn}>View</button>
-                    {userview && <div><label htmlFor='ticketdetails'>Ticket Details</label>
-                    <div id='ticketdetails' className='detailcontainer'>
-                        <p>Username :<span></span></p>
-                        <p>Bus Name :<span></span></p>
-                        <p>Seat No  :<span></span></p>
-                        <p>Email ID :<span></span></p>
-                    </div>
-                    </div>}
-                </form>
-            </div>
-        </>
-    )
+
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:8081/api/view", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: phone,
+          date: date,        // ✅ PURE TEXT DATE
+          busName: busName,  // ✅ MATCHES BACKEND
+        }),
+      });
+
+      if (!res.ok) {
+        alert(await res.text());
+        setTickets([]);
+        return;
+      }
+
+      const data = await res.json();
+      setTickets(Array.isArray(data) ? data : [data]);
+
+    } catch (err) {
+      console.error(err);
+      alert("Error loading ticket");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <h1>View Ticket</h1>
+    <div className="viewticketcontainer">
+      <form onSubmit={viewTicket}>
+        <label>Date</label>
+        <input
+          type="text"
+          placeholder="Year-Month-date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+        {error.date && <p className="inputerror">{error.date}</p>}
+
+        <label>Bus Name</label>
+        <select value={busName} onChange={(e) => setBusName(e.target.value)}>
+          <option value="">-- Select Bus --</option>
+          <option>Green Bus</option>
+          <option>Red Bus</option>
+          <option>Yellow Bus</option>
+        </select>
+        {error.busName && <p className="inputerror">{error.busName}</p>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "View Ticket"}
+        </button>
+      </form>
+
+      {tickets.map((t) => (
+        <div key={t.bookId} className="detailcontainer">
+          <p>Passenger: {t.passengerName}</p>
+          <p>Bus: {t.busName}</p>
+          <p>Seat: {t.seatNo}</p>
+          <p>Email: {t.passengerEmail}</p>
+          <p>Phone: {t.passengerPhone}</p>
+          <p>From: {t.fromPlace}</p>
+          <p>To: {t.toPlace}</p>
+          <p>Date: {t.travelDate}</p>
+          <p>Booking ID: {t.bookId}</p>
+        </div>
+      ))}
+      </div>
+    </div>
+  );
 }
-export default Viewticket
+
+export default Viewticket;

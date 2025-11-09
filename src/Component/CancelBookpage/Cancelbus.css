@@ -75,3 +75,14 @@ h1 {
   font-size: 18px;
   margin: 0;
 }
+/* Dropdowns and inputs */
+.Cancelticketcontainer select{
+  width: 90%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+

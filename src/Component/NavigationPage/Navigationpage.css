@@ -1,7 +1,7 @@
 /* Page title */
 .Navigatetitle {
   text-align: center;
-  color: #1e3a8a;
+  color: red;
   font-size: 32px;
   margin-top: 30px;
   font-weight: 700;
@@ -14,7 +14,7 @@
 }
 
 .Quotescontainer p {
-  color: #334155;
+  color: white;
   font-size: 16px;
   margin: 4px 0;
 }
@@ -40,7 +40,7 @@
 }
 
 /* Icons */
-#icons {
+.icons {
   font-size: 42px;
   color: #2563eb;
   transition: all 0.3s ease;
@@ -48,7 +48,7 @@
 }
 
 /* Hover effect */
-#icons:hover {
+.icons:hover {
   transform: scale(1.2);
   color: #1d4ed8;
 }
@@ -57,9 +57,13 @@
 .iconitem label {
   display: block;
   font-size: 14px;
-  color: #0f172a;
+  color: white;
   font-weight: 600;
   margin-top: 6px;
+}
+.iconitem label:hover {
+  font-size: 15px;
+  cursor: pointer;
 }
 
 /* Responsive */

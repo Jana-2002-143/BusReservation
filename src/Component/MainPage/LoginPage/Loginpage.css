@@ -95,3 +95,7 @@ body {
     padding-left: 3px;
     margin-top: 6px;
 }
+.inputempty{
+    color: red;
+    font-size: small;
+}

@@ -1,43 +1,79 @@
-import { useState } from 'react'
-import './Cancelbus.css'
+import { useState } from "react";
+import "./Cancelbus.css";
 
 function Cancelbus() {
-    const [user,setUser]=useState(false)
+  const [seatNo, setSeatNo] = useState("");
+  const [busName, setBusName] = useState("");
+  const [bookId, setBookId] = useState("");
+  const [errors, setErrors] = useState({});
+  const [cancelled, setCancelled] = useState(false);
 
-    const cancelbtn=(e)=>{
-        e.preventDefault();
-        setUser(true);
+  const cancelbtn = async (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+    if (!seatNo) newErrors.seatNo = "Enter seat number";
+    if (!busName) newErrors.busName = "Select bus name";
+    if (!bookId) newErrors.bookId = "Enter booking ID";
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    try {
+      const res = await fetch("http://localhost:8081/api/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          seatNo,
+          busName,
+          bookId,
+        }),
+      });
+
+      if (res.ok) {
+        alert(await res.text());
+        setCancelled(true);
+      } else {
+        alert("Cancel Failed: " + await res.text());
+      }
+    } catch (err) {
+      alert("Server not responding");
     }
-    return(
-    <>
-       <h1>Cancel Ticket</h1>
-            <div className="Cancelticketcontainer">
-                <form action="cancelticket">
-                    <label
-                        htmlFor="seatno">Booked Seat No</label>
-                        <input
-                            type="seatno"
-                            id="seatno"
-                            placeholder="Seat No" />
-                    <label
-                        htmlFor="email">Booked Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Email" />
-                    <label
-                        htmlFor="num">Booked No</label>
-                        <input
-                            type="number"
-                            id="num"
-                            placeholder="Phone no" />
-                    <button type='submit' onClick={cancelbtn}>Cancel</button>
-                    {user && <div id='ticketdetails' className='detailcontainer'>
-                            <h1>Ticket Canceled !!!!!</h1>
-                    </div>}
-                </form>
-            </div>
-    </>
-)
+  };
+
+  return (
+    <div className="cancel-container">
+      <h1>Cancel Ticket</h1>
+    <div className="Cancelticketcontainer">
+      <form onSubmit={cancelbtn}>
+        <label>Seat Number</label>
+        <input value={seatNo} onChange={(e) => setSeatNo(e.target.value)} />
+        {errors.seatNo && <p className="inputerror">{errors.seatNo}</p>}
+
+        <label>Bus Name</label>
+        <select value={busName} onChange={(e) => setBusName(e.target.value)}>
+          <option value="">-- Select Bus --</option>
+          <option>Green Bus</option>
+          <option>Red Bus</option>
+          <option>Yellow Bus</option>
+        </select>
+        {errors.busName && <p className="inputerror">{errors.busName}</p>}
+
+        <label>Booking ID</label>
+        <input
+          type="number"
+          value={bookId}
+          onChange={(e) => setBookId(e.target.value)}
+        />
+        {errors.bookId && <p className="inputerror">{errors.bookId}</p>}
+
+        <button type="submit">Cancel Ticket</button>
+
+        {cancelled && <h2>Ticket Cancelled Successfully!</h2>}
+      </form>
+      </div>
+    </div>
+  );
 }
-export default Cancelbus
+
+export default Cancelbus;
