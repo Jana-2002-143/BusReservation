@@ -28,13 +28,13 @@ function Viewticket() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8081/api/view", {
+      const res = await fetch("https://privatebusbooking.netlify.app/.netlify/functions/view", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phone: phone,
-          date: date,        // ✅ PURE TEXT DATE
-          busName: busName,  // ✅ MATCHES BACKEND
+          date: date,        
+          busName: busName, 
         }),
       });
 

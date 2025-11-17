@@ -20,21 +20,24 @@ function Cancelbus() {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const res = await fetch("http://localhost:8081/api/cancel", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          seatNo,
-          busName,
-          bookId,
-        }),
-      });
+      const res = await fetch(
+        "https://privatebusbooking.netlify.app/.netlify/functions/cancel",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            seatNo,
+            busName,
+            bookId,
+          }),
+        }
+      );
 
       if (res.ok) {
-        alert(await res.text());
         setCancelled(true);
+        alert(await res.text());
       } else {
-        alert("Cancel Failed: " + await res.text());
+        alert("Cancel Failed: " + (await res.text()));
       }
     } catch (err) {
       alert("Server not responding");
@@ -44,33 +47,37 @@ function Cancelbus() {
   return (
     <div className="cancel-container">
       <h1>Cancel Ticket</h1>
-    <div className="Cancelticketcontainer">
-      <form onSubmit={cancelbtn}>
-        <label>Seat Number</label>
-        <input value={seatNo} onChange={(e) => setSeatNo(e.target.value)} />
-        {errors.seatNo && <p className="inputerror">{errors.seatNo}</p>}
+      <div className="Cancelticketcontainer">
+        <form onSubmit={cancelbtn}>
+          <label>Seat Number</label>
+          <input
+            type="number"
+            value={seatNo}
+            onChange={(e) => setSeatNo(Number(e.target.value))}
+          />
+          {errors.seatNo && <p className="inputerror">{errors.seatNo}</p>}
 
-        <label>Bus Name</label>
-        <select value={busName} onChange={(e) => setBusName(e.target.value)}>
-          <option value="">-- Select Bus --</option>
-          <option>Green Bus</option>
-          <option>Red Bus</option>
-          <option>Yellow Bus</option>
-        </select>
-        {errors.busName && <p className="inputerror">{errors.busName}</p>}
+          <label>Bus Name</label>
+          <select value={busName} onChange={(e) => setBusName(e.target.value)}>
+            <option value="">-- Select Bus --</option>
+            <option>Green Bus</option>
+            <option>Red Bus</option>
+            <option>Yellow Bus</option>
+          </select>
+          {errors.busName && <p className="inputerror">{errors.busName}</p>}
 
-        <label>Booking ID</label>
-        <input
-          type="number"
-          value={bookId}
-          onChange={(e) => setBookId(e.target.value)}
-        />
-        {errors.bookId && <p className="inputerror">{errors.bookId}</p>}
+          <label>Booking ID</label>
+          <input
+            type="number"
+            value={bookId}
+            onChange={(e) => setBookId(e.target.value)}
+          />
+          {errors.bookId && <p className="inputerror">{errors.bookId}</p>}
 
-        <button type="submit">Cancel Ticket</button>
+          <button type="submit">Cancel Ticket</button>
 
-        {cancelled && <h2>Ticket Cancelled Successfully!</h2>}
-      </form>
+          {cancelled && <h2>Ticket Cancelled Successfully!</h2>}
+        </form>
       </div>
     </div>
   );

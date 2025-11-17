@@ -33,7 +33,7 @@ function Loginpage() {
     const loginData = { username: btnuser, password: btnpass };
 
     try {
-      const response = await fetch("http://localhost:8081/api/login", {
+      const response = await fetch("https://privatebusbooking.netlify.app/.netlify/functions/loginpage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
