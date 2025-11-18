@@ -20,18 +20,15 @@ function Cancelbus() {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const res = await fetch(
-        "https://privatebusbooking.netlify.app/.netlify/functions/cancel",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            seatNo,
-            busName,
-            bookId,
-          }),
-        }
-      );
+      const res = await fetch("http://localhost:8081/api/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          seatNo,
+          busName,
+          bookId,
+        }),
+      });
 
       if (res.ok) {
         setCancelled(true);

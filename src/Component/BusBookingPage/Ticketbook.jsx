@@ -62,7 +62,7 @@ function Ticketbook() {
     const bookingData = {
       fromPlace,
       toPlace,
-      travelDate, 
+      travelDate,
       busName,
       seatNo: String(seatNo),
       passengerName: username,
@@ -72,7 +72,7 @@ function Ticketbook() {
 
     setLoading(true);
     try {
-      const response = await fetch("https://privatebusbooking.netlify.app/.netlify/functions/ticket", {
+      const response = await fetch("http://localhost:8081/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
@@ -129,8 +129,7 @@ function Ticketbook() {
 
           <label>Date</label>
           <input
-            type="text"
-            placeholder="Year-Month-Date"
+            type="date"
             value={travelDate}
             onChange={(e) => {
               setTravelDate(e.target.value);

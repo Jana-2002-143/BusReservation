@@ -3,7 +3,7 @@ import "./Viewticket.css";
 
 function Viewticket() {
   const [busName, setBusName] = useState("");
-  const [date, setDate] = useState("");   // text format
+  const [bookId, setBookId] = useState("");
   const [error, setError] = useState({});
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ function Viewticket() {
     e.preventDefault();
 
     const newErrors = {};
-    if (!date) newErrors.date = "Please enter date";
+    if (!bookId) newErrors.bookId = "Please enter Booking ID";
     if (!busName) newErrors.busName = "Please select a bus";
     setError(newErrors);
 
@@ -28,13 +28,12 @@ function Viewticket() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://privatebusbooking.netlify.app/.netlify/functions/view", {
+      const res = await fetch("http://localhost:8081/api/view", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: phone,
-          date: date,        
-          busName: busName, 
+          bookId: bookId,
+          busName: busName,
         }),
       });
 
@@ -46,7 +45,6 @@ function Viewticket() {
 
       const data = await res.json();
       setTickets(Array.isArray(data) ? data : [data]);
-
     } catch (err) {
       console.error(err);
       alert("Error loading ticket");
@@ -58,44 +56,44 @@ function Viewticket() {
   return (
     <div>
       <h1>View Ticket</h1>
-    <div className="viewticketcontainer">
-      <form onSubmit={viewTicket}>
-        <label>Date</label>
-        <input
-          type="text"
-          placeholder="Year-Month-date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        {error.date && <p className="inputerror">{error.date}</p>}
+      <div className="viewticketcontainer">
+        <form onSubmit={viewTicket}>
+          <label>Book Id</label>
+          <input
+            type="text"
+            placeholder="Booking Id"
+            value={bookId}
+            onChange={(e) => setBookId(e.target.value)}
+          />
+          {error.bookId && <p className="inputerror">{error.bookId}</p>}
 
-        <label>Bus Name</label>
-        <select value={busName} onChange={(e) => setBusName(e.target.value)}>
-          <option value="">-- Select Bus --</option>
-          <option>Green Bus</option>
-          <option>Red Bus</option>
-          <option>Yellow Bus</option>
-        </select>
-        {error.busName && <p className="inputerror">{error.busName}</p>}
+          <label>Bus Name</label>
+          <select value={busName} onChange={(e) => setBusName(e.target.value)}>
+            <option value="">-- Select Bus --</option>
+            <option>Green Bus</option>
+            <option>Red Bus</option>
+            <option>Yellow Bus</option>
+          </select>
+          {error.busName && <p className="inputerror">{error.busName}</p>}
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "View Ticket"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Loading..." : "View Ticket"}
+          </button>
+        </form>
 
-      {tickets.map((t) => (
-        <div key={t.bookId} className="detailcontainer">
-          <p>Passenger: {t.passengerName}</p>
-          <p>Bus: {t.busName}</p>
-          <p>Seat: {t.seatNo}</p>
-          <p>Email: {t.passengerEmail}</p>
-          <p>Phone: {t.passengerPhone}</p>
-          <p>From: {t.fromPlace}</p>
-          <p>To: {t.toPlace}</p>
-          <p>Date: {t.travelDate}</p>
-          <p>Booking ID: {t.bookId}</p>
-        </div>
-      ))}
+        {tickets.map((t) => (
+          <div key={t.bookId} className="detailcontainer">
+            <p>Passenger: {t.passengerName}</p>
+            <p>Bus: {t.busName}</p>
+            <p>Seat: {t.seatNo}</p>
+            <p>Email: {t.passengerEmail}</p>
+            <p>Phone: {t.passengerPhone}</p>
+            <p>From: {t.fromPlace}</p>
+            <p>To: {t.toPlace}</p>
+            <p>Date: {t.travelDate}</p>
+            <p>Booking ID: {t.bookId}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
