@@ -41,22 +41,27 @@ function Ticketbook() {
     }
 
     let isValid = true;
+
     if (!fromPlace || !toPlace) {
       alert("Please select both From and To places");
       isValid = false;
     }
+
     if (fromPlace === toPlace) {
       alert("From and To cannot be the same");
       isValid = false;
     }
+
     if (!travelDate) {
       setDateError(true);
       isValid = false;
     }
+
     if (!seatNo) {
       setSeatError(true);
       isValid = false;
     }
+
     if (!isValid) return;
 
     const bookingData = {
@@ -64,13 +69,32 @@ function Ticketbook() {
       toPlace,
       travelDate,
       busName,
-      seatNo: String(seatNo),
+      seatNo: Number(seatNo), 
       passengerName: username,
       passengerEmail: email,
       passengerPhone: phone,
     };
 
     setLoading(true);
+    
+    const checkResponse = await fetch("http://localhost:8081/api/checkSeat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        seatNo: Number(seatNo),
+        busName,
+        travelDate,
+      }),
+    });
+
+    const checkResult = await checkResponse.text();
+
+    if (checkResult === "UNAVAILABLE") {
+      alert("❌ Seat already booked! Please choose another seat.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:8081/api/book", {
         method: "POST",
@@ -130,13 +154,13 @@ function Ticketbook() {
           <label>Date</label>
           <input
             type="date"
+            min={new Date().toISOString().split("T")[0]} 
             value={travelDate}
             onChange={(e) => {
               setTravelDate(e.target.value);
               setDateError(false);
             }}
           />
-
           {dateError && <p className="inputuser">Please choose a date</p>}
 
           <label>Seat No</label>

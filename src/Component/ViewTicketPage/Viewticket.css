@@ -80,18 +80,51 @@ body {
 
 /* Main ticket details container */
 .detailcontainer {
-  padding: 10px 15px;
-  margin-top: 5px;
+  background: #ffffff;
+  padding: 20px;
+  margin: 20px auto;
+  width: 350px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-left: 6px solid #4CAF50; /* Green Ticket Stripe */
+  transition: transform 0.2s ease-in-out;
 }
-/* Each detail line */
+
+.detailcontainer:hover {
+  transform: scale(1.02);
+}
+
 .detailcontainer p {
-  margin: 8px 0;
-  font-size: 15px;
-  color: #0f172a;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 6px;
+  font-size: 16px;
+  color: #333;
+  margin: 6px 0;
+  font-weight: 500;
 }
+
+.detailcontainer p span {
+  font-weight: bold;
+  color: #111;
+}
+
+/* Optional Section Divider */
+.detailcontainer hr {
+  border: none;
+  border-top: 1px dashed #ccc;
+  margin: 10px 0;
+}
+
+/* For Responsive */
+@media (max-width: 480px) {
+  .detailcontainer {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .detailcontainer p {
+    font-size: 14px;
+  }
+}
+
 .inputuser{
   color: red;
   font-size: small;
