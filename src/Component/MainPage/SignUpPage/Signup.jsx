@@ -28,7 +28,7 @@ function Signup() {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const res = await fetch("http://localhost:8081/api/signup", {
+      const res = await fetch("https://busbooking-backend-43kz.onrender.com/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
