@@ -12,11 +12,17 @@ function Loginpage() {
   const userinput = (e) => {
     setBtnuser(e.target.value);
     if (e.target.value.trim() !== "") setEmpty(false);
+    else {
+      setEmpty(true);
+    }
   };
 
   const userpassword = (e) => {
     setBtnpass(e.target.value);
     if (e.target.value.trim() !== "") setPasskey(false);
+    else {
+      setPassKey(true);
+    }
   };
 
   const funbtn = async (e) => {
@@ -45,9 +51,6 @@ function Loginpage() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("username", data.username);
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("phone", data.phone);
 
         alert("Login Successful!");
         navigate("/Navigationpage");

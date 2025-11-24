@@ -61,27 +61,49 @@ function Signup() {
       <div className="container">
         <form onSubmit={funsignbtn} className="busform">
           <label>User Name</label>
-          <input type="text" placeholder="UserName" onChange={(e) => setBtnuser(e.target.value)} />
+          <input
+            type="text"
+            placeholder="UserName"
+            onChange={(e) => setBtnuser(e.target.value)}
+          />
           {errors.user && <p className="inputempty">{errors.user}</p>}
 
           <label>Password</label>
-          <input type="password" placeholder="Password" onChange={(e) => setBtnpass(e.target.value)} />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setBtnpass(e.target.value)}
+          />
           {errors.pass && <p className="inputempty">{errors.pass}</p>}
 
           <label>Re Type-Password</label>
-          <input type="password" placeholder="ReType Password" onChange={(e) => setBtnrepass(e.target.value)} />
+          <input
+            type="password"
+            placeholder="ReType Password"
+            onChange={(e) => setBtnrepass(e.target.value)}
+          />
           {errors.repass && <p className="inputempty">{errors.repass}</p>}
           {errors.match && <p className="inputempty">{errors.match}</p>}
 
           <label>Email</label>
-          <input type="text" placeholder="Email" onChange={(e) => setBtnemail(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Email"
+            onChange={(e) => setBtnemail(e.target.value)}
+          />
           {errors.email && <p className="inputempty">{errors.email}</p>}
 
           <label>Phone No</label>
-          <input type="text" placeholder="Phoneno" onChange={(e) => setBtnphoneno(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Phoneno"
+            onChange={(e) => setBtnphoneno(e.target.value)}
+          />
           {errors.phone && <p className="inputempty">{errors.phone}</p>}
 
-          <button type="submit" className="formsubmit">Submit</button>
+          <button type="submit" className="formsubmit">
+            Submit
+          </button>
         </form>
       </div>
     </>
