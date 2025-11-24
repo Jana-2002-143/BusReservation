@@ -20,7 +20,7 @@ function Cancelbus() {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const res = await fetch("https://busbooking-backend-43kz.onrender.com/api/cancel", {
+      const res = await fetch("https://busbooking-backend-w4ip.onrender.com/api/cancel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

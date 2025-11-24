@@ -96,7 +96,7 @@ function Ticketbook() {
     }
 
     try {
-      const response = await fetch("https://busbooking-backend-43kz.onrender.com/api/book", {
+      const response = await fetch("https://busbooking-backend-w4ip.onrender.com/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
