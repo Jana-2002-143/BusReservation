@@ -22,22 +22,31 @@ function Signup() {
     if (!btnrepass.trim()) newErrors.repass = "Please enter Retype password";
     if (btnpass !== btnrepass) newErrors.match = "Passwords do not match";
     if (!btnemail.trim()) newErrors.email = "Please enter email";
-    if (!btnphoneno.trim()) newErrors.phone = "Please enter phone number";
+    if (!btnphoneno.trim()) {
+      newErrors.phone = "Please enter phone number";
+    } else if (!/^\d+$/.test(btnphoneno)) {
+      newErrors.phone = "Phone must contain only numbers";
+    } else if (btnphoneno.length !== 10) {
+      newErrors.phone = "Phone must be exactly 10 digits";
+    }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const res = await fetch("https://busbooking-backend-w4ip.onrender.com/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: btnuser,
-          password: btnpass,
-          email: btnemail,
-          phone: btnphoneno,
-        }),
-      });
+      const res = await fetch(
+        "https://busbooking-backend-w4ip.onrender.com/api/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: btnuser,
+            password: btnpass,
+            email: btnemail,
+            phone: btnphoneno,
+          }),
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();
@@ -48,7 +57,8 @@ function Signup() {
         alert("Account Created");
         navigate("/Navigationpage");
       } else {
-        alert("Signup Failed");
+        const errorMsg = await res.text();
+        alert("Signup Failed: " + errorMsg);
       }
     } catch {
       alert("Server not reachable");
