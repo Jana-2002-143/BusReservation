@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function Ticketbook() {
   const area = [
     "Chennai",
+    "Pudukkottai",
     "Coimbatore",
     "Madurai",
     "Tiruchirappalli",
@@ -12,6 +13,7 @@ function Ticketbook() {
     "Erode",
     "Salem",
     "Vellore",
+    "Pattukkottai",
     "Thoothukudi",
     "Kanchipuram",
   ];
@@ -27,9 +29,19 @@ function Ticketbook() {
   const [seatError, setSeatError] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [availableSeats, setAvailableSeats] = useState([]);
+
   const username = localStorage.getItem("username");
   const email = localStorage.getItem("email");
   const phone = localStorage.getItem("phone");
+
+  const parseSafeJSON = (text) => {
+    try {
+      return JSON.parse(text);
+    } catch {
+      return text; // return pure string
+    }
+  };
 
   const bookTicket = async (e) => {
     e.preventDefault();
@@ -41,11 +53,6 @@ function Ticketbook() {
     }
 
     let isValid = true;
-
-    if (!fromPlace || !toPlace) {
-      alert("Please select both From and To places");
-      isValid = false;
-    }
 
     if (fromPlace === toPlace) {
       alert("From and To cannot be the same");
@@ -64,54 +71,82 @@ function Ticketbook() {
 
     if (!isValid) return;
 
+    setLoading(true);
+
+    // ------- SAFE PARSE (no stream errors) -------
+    const checkResponse = await fetch(
+      "https://busbooking-backend-w4ip.onrender.com/api/checkSeat",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          seatNo: Number(seatNo),
+          busName,
+          travelDate,
+        }),
+      }
+    );
+
+    const checkText = await checkResponse.text(); // read ONCE
+    const checkResult = parseSafeJSON(checkText); // convert later
+
+    if (typeof checkResult === "string") {
+      alert(checkResult);
+      setLoading(false);
+      return;
+    }
+
+    setAvailableSeats(checkResult.availableSeats || []);
+
+    if (checkResult.seatStatus === "UNAVAILABLE") {
+      alert(
+        "❌ Seat already booked!\n\nAvailable seats:\n" +
+          (checkResult.availableSeats?.join(", ") || "None")
+      );
+      setLoading(false);
+      return;
+    }
+
     const bookingData = {
       fromPlace,
       toPlace,
       travelDate,
       busName,
-      seatNo: Number(seatNo), 
+      seatNo: Number(seatNo),
       passengerName: username,
       passengerEmail: email,
       passengerPhone: phone,
     };
 
-    setLoading(true);
-    
-    const checkResponse = await fetch("https://busbooking-backend-w4ip.onrender.com/api/checkSeat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        seatNo: Number(seatNo),
-        busName,
-        travelDate,
-      }),
-    });
-
-    const checkResult = await checkResponse.text();
-
-    if (checkResult === "UNAVAILABLE") {
-      alert("❌ Seat already booked! Please choose another seat.");
-      setLoading(false);
-      return;
-    }
-
+    // ---------------- BOOKING ----------------
     try {
-      const response = await fetch("https://busbooking-backend-w4ip.onrender.com/api/book", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingData),
-      });
+      const response = await fetch(
+        "https://busbooking-backend-w4ip.onrender.com/api/book",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bookingData),
+        }
+      );
 
-      if (response.ok) {
-        const saved = await response.json();
-        alert("Ticket Booked Successfully. Booking ID: " + saved.bookId);
-        navigate("/Navigationpage");
-      } else {
-        const errorText = await response.text();
-        alert("Booking Failed: " + errorText);
+      const resText = await response.text(); // read ONCE
+      const result = parseSafeJSON(resText);
+
+      if (!response.ok) {
+        alert("Booking Failed: " + resText);
+        setLoading(false);
+        return;
       }
+
+      if (typeof result === "string") {
+        alert(result);
+        setLoading(false);
+        return;
+      }
+
+      alert("Ticket Booked Successfully. Booking ID: " + result.bookId);
+      navigate("/Navigationpage");
     } catch (err) {
-      console.error(err);
       alert("Backend Not Connected");
     } finally {
       setLoading(false);
@@ -154,7 +189,7 @@ function Ticketbook() {
           <label>Date</label>
           <input
             type="date"
-            min={new Date().toISOString().split("T")[0]} 
+            min={new Date().toISOString().split("T")[0]}
             value={travelDate}
             onChange={(e) => {
               setTravelDate(e.target.value);
@@ -172,6 +207,7 @@ function Ticketbook() {
               setSeatError(false);
             }}
             min="1"
+            max="40"
           />
           {seatError && <p className="inputuser">Please enter seat number</p>}
 
@@ -179,6 +215,13 @@ function Ticketbook() {
             {loading ? "Booking..." : "Book"}
           </button>
         </form>
+
+        {availableSeats.length > 0 && (
+          <div className="available-seats">
+            <h3>Available Seats</h3>
+            <p>{availableSeats.join(", ")}</p>
+          </div>
+        )}
       </div>
     </>
   );
