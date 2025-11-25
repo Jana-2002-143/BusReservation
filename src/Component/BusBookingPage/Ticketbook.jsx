@@ -39,7 +39,7 @@ function Ticketbook() {
     try {
       return JSON.parse(text);
     } catch {
-      return text; // return pure string
+      return text;
     }
   };
 
@@ -73,7 +73,7 @@ function Ticketbook() {
 
     setLoading(true);
 
-    // ------- SAFE PARSE (no stream errors) -------
+    // ---------------- CHECK SEAT ----------------
     const checkResponse = await fetch(
       "https://busbooking-backend-w4ip.onrender.com/api/checkSeat",
       {
@@ -87,59 +87,50 @@ function Ticketbook() {
       }
     );
 
-    const checkText = await checkResponse.text(); // read ONCE
-    const checkResult = parseSafeJSON(checkText); // convert later
+    const checkText = await checkResponse.text();
+    const checkResult = parseSafeJSON(checkText);
 
+    // If backend sends plain string (NOT JSON)
     if (typeof checkResult === "string") {
       alert(checkResult);
       setLoading(false);
       return;
     }
 
+    // Show available seats
     setAvailableSeats(checkResult.availableSeats || []);
 
     if (checkResult.seatStatus === "UNAVAILABLE") {
-      alert(
-        "❌ Seat already booked!\n\nAvailable seats:\n" +
-          (checkResult.availableSeats?.join(", ") || "None")
-      );
+      alert("❌ Seat already booked!");
       setLoading(false);
       return;
     }
 
-    const bookingData = {
-      fromPlace,
-      toPlace,
-      travelDate,
-      busName,
-      seatNo: Number(seatNo),
-      passengerName: username,
-      passengerEmail: email,
-      passengerPhone: phone,
-    };
-
-    // ---------------- BOOKING ----------------
+    // ---------------- BOOK TICKET ----------------
     try {
       const response = await fetch(
         "https://busbooking-backend-w4ip.onrender.com/api/book",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(bookingData),
+          body: JSON.stringify({
+            fromPlace,
+            toPlace,
+            travelDate,
+            busName,
+            seatNo: Number(seatNo),
+            passengerName: username,
+            passengerEmail: email,
+            passengerPhone: phone,
+          }),
         }
       );
 
-      const resText = await response.text(); // read ONCE
+      const resText = await response.text();
       const result = parseSafeJSON(resText);
 
       if (!response.ok) {
         alert("Booking Failed: " + resText);
-        setLoading(false);
-        return;
-      }
-
-      if (typeof result === "string") {
-        alert(result);
         setLoading(false);
         return;
       }
@@ -214,14 +205,25 @@ function Ticketbook() {
           <button type="submit" disabled={loading}>
             {loading ? "Booking..." : "Book"}
           </button>
-        </form>
+          {/* AVAILABLE SEATS GRID */}
+          {availableSeats.length > 0 && (
+            <div className="available-seats">
+              <h3>Available Seats</h3>
 
-        {availableSeats.length > 0 && (
-          <div className="available-seats">
-            <h3>Available Seats</h3>
-            <p>{availableSeats.join(", ")}</p>
-          </div>
-        )}
+              <div className="seat-grid">
+                {availableSeats.map((s) => (
+                  <div
+                    key={s}
+                    className="seat-box"
+                    onClick={() => setSeatNo(s)}
+                  >
+                    {s}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </form>
       </div>
     </>
   );

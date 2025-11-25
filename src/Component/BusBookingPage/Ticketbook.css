@@ -102,3 +102,35 @@ body {
   color: red;
   font-size: small;
 }
+.available-seats {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f7f7f7;
+  border-radius: 10px;
+}
+
+.available-seats h3 {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+}
+
+.seat-box {
+  padding: 10px;
+  background: #dfffe0;
+  border: 1px solid #8fda95;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.seat-box:hover {
+  background: #b7f5bd;
+}
