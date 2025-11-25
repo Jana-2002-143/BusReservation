@@ -29,7 +29,7 @@ function Viewticket() {
 
     try {
       const res = await fetch("https://busbooking-backend-w4ip.onrender.com/api/view", {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           bookId: bookId,
