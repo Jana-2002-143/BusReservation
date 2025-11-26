@@ -22,6 +22,7 @@ body {
 .ticketcontainer {
   background-color: #ffffff;
   margin-top: 30px;
+  margin: 10px;
   padding: 40px 50px;
   border-radius: 14px;
   width: 90%;
@@ -46,22 +47,22 @@ body {
 }
 
 /* Dropdowns and inputs */
-.ticketcontainer select{
+.ticketcontainer select {
   width: 90%;
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #cbd5e1;
   font-size: 14px;
-  transition: 0.3s ease;
 }
+
 .ticketcontainer input {
   width: 80%;
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #cbd5e1;
   font-size: 14px;
-  transition: 0.3s ease;
 }
+
 /* Book button */
 .ticketcontainer button {
   background-color: #2563eb;
@@ -75,7 +76,6 @@ body {
   width: 90%;
   margin-top: 10px;
   transition: all 0.3s ease;
-  letter-spacing: 0.5px;
 }
 
 /* Hover effect */
@@ -84,24 +84,16 @@ body {
   transform: translateY(-2px);
 }
 
-/* Active (press) effect */
 .ticketcontainer button:active {
   transform: translateY(0);
 }
 
-/* Available seats display */
-.seatsnum {
-  background-color: #f1f5f9;
-  color: #ef4444;
-  padding: 8px 10px;
-  font-weight: 500;
-  text-align: center;
-  margin-top: 5px;
-}
-.inputuser{
+.inputuser {
   color: red;
   font-size: small;
 }
+
+/* Seat layout container */
 .available-seats {
   margin-top: 20px;
   padding: 15px;
@@ -114,23 +106,57 @@ body {
   text-align: center;
 }
 
-.seat-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
+/* Bus seat layout */
+.bus-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.seat-side {
+  display: flex;
   gap: 10px;
 }
 
+.walkway {
+  width: 40px; /* space between left & right seats */
+}
+
+/* Seat box */
 .seat-box {
-  padding: 10px;
-  background: #dfffe0;
-  border: 1px solid #8fda95;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 6px;
-  text-align: center;
   font-weight: bold;
   cursor: pointer;
+  font-size: 14px;
   transition: 0.2s;
 }
 
-.seat-box:hover {
-  background: #b7f5bd;
+/* Available = Green */
+.available {
+  background-color: #00b34a;
+  color: white;
+}
+
+/* Booked = Gray */
+.booked {
+  background-color: #9ca3af;
+  color: white;
+  cursor: not-allowed;
+}
+.selected {
+  border: 3px solid #2563eb;
+  box-shadow: 0 0 6px #2563eb;
 }

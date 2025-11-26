@@ -1,33 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Ticketbook.css";
 import { useNavigate } from "react-router-dom";
 
 function Ticketbook() {
   const area = [
-    "Chennai",
-    "Pudukkottai",
-    "Coimbatore",
-    "Madurai",
-    "Tiruchirappalli",
-    "Tirunelveli",
-    "Erode",
-    "Salem",
-    "Vellore",
-    "Pattukkottai",
-    "Thoothukudi",
-    "Kanchipuram",
-  ];
+  "Ariyalur",
+  "Chengalpattu",
+  "Chennai",
+  "Coimbatore",
+  "Cuddalore",
+  "Dharmapuri",
+  "Dindigul",
+  "Erode",
+  "Kallakurichi",
+  "Kanchipuram",
+  "Kanyakumari",
+  "Karur",
+  "Krishnagiri",
+  "Madurai",
+  "Mayiladuthurai",
+  "Nagapattinam",
+  "Namakkal",
+  "Nilgiris",
+  "Perambalur",
+  "Pudukkottai",
+  "Ramanathapuram",
+  "Ranipet",
+  "Salem",
+  "Sivaganga",
+  "Tenkasi",
+  "Thanjavur",
+  "Theni",
+  "Thoothukudi",
+  "Tiruchirappalli",
+  "Tirunelveli",
+  "Tirupathur",
+  "Tiruppur",
+  "Tiruvallur",
+  "Tiruvannamalai",
+  "Tiruvarur",
+  "Vellore",
+  "Viluppuram",
+  "Virudhunagar"
+];
 
   const navigate = useNavigate();
 
-  const [fromPlace, setFromPlace] = useState(area[0]);
-  const [toPlace, setToPlace] = useState(area[1]);
+  const [fromPlace, setFromPlace] = useState(area[2]);
+  const [toPlace, setToPlace] = useState(area[19]);
   const [travelDate, setTravelDate] = useState("");
   const [busName, setBusName] = useState("Green Bus");
   const [seatNo, setSeatNo] = useState("");
   const [dateError, setDateError] = useState(false);
   const [seatError, setSeatError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [seatLoading, setSeatLoading] = useState(false);
 
   const [availableSeats, setAvailableSeats] = useState([]);
 
@@ -42,6 +69,42 @@ function Ticketbook() {
       return text;
     }
   };
+
+  useEffect(() => {
+    const fetchAvailableSeats = async () => {
+      if (!travelDate) return;
+
+      setSeatLoading(true);
+
+      try {
+        const response = await fetch(
+          "https://busbooking-backend-w4ip.onrender.com/api/checkSeat",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              seatNo: 1,
+              busName,
+              travelDate,
+            }),
+          }
+        );
+
+        const text = await response.text();
+        const result = parseSafeJSON(text);
+
+        if (typeof result !== "string") {
+          setAvailableSeats(result.availableSeats || []);
+        }
+      } catch (err) {
+        console.log("Error fetching available seats", err);
+      } finally {
+        setSeatLoading(false);
+      }
+    };
+
+    fetchAvailableSeats();
+  }, [busName, travelDate, fromPlace, toPlace]);
 
   const bookTicket = async (e) => {
     e.preventDefault();
@@ -90,14 +153,12 @@ function Ticketbook() {
     const checkText = await checkResponse.text();
     const checkResult = parseSafeJSON(checkText);
 
-    // If backend sends plain string (NOT JSON)
     if (typeof checkResult === "string") {
       alert(checkResult);
       setLoading(false);
       return;
     }
 
-    // Show available seats
     setAvailableSeats(checkResult.availableSeats || []);
 
     if (checkResult.seatStatus === "UNAVAILABLE") {
@@ -198,31 +259,74 @@ function Ticketbook() {
               setSeatError(false);
             }}
             min="1"
-            max="40"
+            max="28"
           />
           {seatError && <p className="inputuser">Please enter seat number</p>}
 
           <button type="submit" disabled={loading}>
             {loading ? "Booking..." : "Book"}
           </button>
-          {/* AVAILABLE SEATS GRID */}
-          {availableSeats.length > 0 && (
-            <div className="available-seats">
-              <h3>Available Seats</h3>
 
-              <div className="seat-grid">
-                {availableSeats.map((s) => (
-                  <div
-                    key={s}
-                    className="seat-box"
-                    onClick={() => setSeatNo(s)}
-                  >
-                    {s}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {travelDate && availableSeats.length > 0 && (
+  <div className="available-seats">
+    <h3>Select Your Seat</h3>
+
+    <div className="bus-layout">
+      {Array.from({ length: 7 }).map((_, row) => (
+        <div className="seat-row" key={row}>
+
+          {/* LEFT 2 SEATS */}
+          <div className="seat-side">
+            {[0, 1].map((col) => {
+              const seatNoCalc = row * 4 + col + 1;
+              const isAvailable = availableSeats.includes(seatNoCalc);
+              const isSelected = seatNoCalc == seatNo;
+
+              return (
+                <div
+                  key={seatNoCalc}
+                  className={`seat-box 
+                    ${isAvailable ? "available" : "booked"} 
+                    ${isSelected ? "selected" : ""}
+                  `}
+                  onClick={() => (isAvailable ? setSeatNo(seatNoCalc) : null)}
+                >
+                  {seatNoCalc}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="walkway"></div>
+
+          {/* RIGHT 2 SEATS */}
+          <div className="seat-side">
+            {[2, 3].map((col) => {
+              const seatNoCalc = row * 4 + col + 1;
+              const isAvailable = availableSeats.includes(seatNoCalc);
+              const isSelected = seatNoCalc == seatNo;
+
+              return (
+                <div
+                  key={seatNoCalc}
+                  className={`seat-box 
+                    ${isAvailable ? "available" : "booked"} 
+                    ${isSelected ? "selected" : ""}
+                  `}
+                  onClick={() => (isAvailable ? setSeatNo(seatNoCalc) : null)}
+                >
+                  {seatNoCalc}
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
         </form>
       </div>
     </>
